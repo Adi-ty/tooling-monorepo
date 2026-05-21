@@ -1,0 +1,23 @@
+{
+    "require-dev": {
+        "phpstan/phpstan": "^2.0",
+        "phpunit/phpunit": "^9.6",
+        "squizlabs/php_codesniffer": "^3.10",
+        "symplify/monorepo-builder": "^12.7"
+    },
+    "require": {
+        "php": "^8.3",
+        "symfony/dependency-injection": "^5.0",
+        "symfony/http-kernel": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AdiTy\\FirstPackage\\": "composer-packages/first-package/src",
+            "AdiTy\\SecondPackage\\": "composer-packages/second-package/src"
+        }
+    },
+    "replace": {
+        "adi-ty/first-package": "self.version",
+        "adi-ty/second-package": "self.version"
+    }
+}

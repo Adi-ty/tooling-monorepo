@@ -1,0 +1,113 @@
+name: Split Composer Packages
+
+# Modeled on the Symfony pattern:
+#   * splitsh.json at the repo root is the single source of truth for
+#     mirror-repo name -> monorepo subdirectory.
+#   * On a tag push (v*), this workflow reads splitsh.json, builds a
+#     matrix dynamically, and runs splitsh-lite (via the danharrin action)
+#     for each entry to force-push the subtree to its mirror.
+#
+# To add/remove a package: edit splitsh.json. No workflow change needed.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  # Manual trigger lets us smoke-test without cutting a real tag.
+  workflow_dispatch:
+    inputs:
+      test_tag:
+        description: 'Tag to push to mirrors (use a throwaway tag for tests, e.g. v0.0.0-test)'
+        required: true
+        default: 'v0.0.0-test'
+
+jobs:
+  # ---------------------------------------------------------------------
+  # Read splitsh.json once and emit a matrix the next job consumes.
+  # ---------------------------------------------------------------------
+  build-matrix:
+    name: Build split matrix from splitsh.json
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+      organization: ${{ steps.set.outputs.organization }}
+      branch: ${{ steps.set.outputs.branch }}
+      user_name: ${{ steps.set.outputs.user_name }}
+      user_email: ${{ steps.set.outputs.user_email }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse splitsh.json
+        id: set
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Build a JSON array of { mirror_repo, package_directory } from
+          # splitsh.subtrees. jq normalises both the shorthand string form
+          # ("composer-packages/foo") and the object form ({ "prefixes": [...] }).
+          matrix=$(jq -c '{
+            include: [
+              .subtrees | to_entries[] | {
+                mirror_repo: .key,
+                package_directory: (
+                  if (.value | type) == "string" then .value
+                  else .value.prefixes[0].from
+                  end
+                )
+              }
+            ]
+          }' splitsh.json)
+
+          {
+            echo "matrix=$matrix"
+            echo "organization=$(jq -r '.organization'          splitsh.json)"
+            echo "branch=$(jq      -r '.defaults.branch'        splitsh.json)"
+            echo "user_name=$(jq   -r '.defaults.user_name'     splitsh.json)"
+            echo "user_email=$(jq  -r '.defaults.user_email'    splitsh.json)"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Echo resolved matrix (debug)
+        run: echo '${{ steps.set.outputs.matrix }}' | jq .
+
+  # ---------------------------------------------------------------------
+  # One job per subtree, in parallel. Each runs splitsh-lite + push.
+  # ---------------------------------------------------------------------
+  split:
+    name: Split ${{ matrix.mirror_repo }}
+    needs: build-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+    steps:
+      - name: Checkout monorepo (full history)
+        uses: actions/checkout@v4
+        with:
+          # splitsh-lite needs every commit that ever touched the subtree.
+          fetch-depth: 0
+
+      - name: Resolve target tag
+        id: tag
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ github.event.inputs.test_tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Split and push subtree to mirror
+        uses: danharrin/monorepo-split-github-action@v2.4.5
+        with:
+          package_directory: ${{ matrix.package_directory }}
+          repository_organization: ${{ needs.build-matrix.outputs.organization }}
+          repository_name: ${{ matrix.mirror_repo }}
+          branch: ${{ needs.build-matrix.outputs.branch }}
+          tag: ${{ steps.tag.outputs.value }}
+          user_name: ${{ needs.build-matrix.outputs.user_name }}
+          user_email: ${{ needs.build-matrix.outputs.user_email }}
+        env:
+          # Fine-grained PAT (or GitHub App token) with 'contents: write'
+          # on every mirror repo listed in splitsh.json.
+          GITHUB_TOKEN: ${{ secrets.SPLIT_TOKEN }}

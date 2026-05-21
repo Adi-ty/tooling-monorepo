@@ -1,0 +1,30 @@
+{
+    "name": "@adi.lib/eslint-config",
+    "version": "0.1.0",
+    "description": "Shareable ESLint flat config for rtCamp WordPress projects.",
+    "license": "GPL-2.0-or-later",
+    "author": "rtCamp",
+    "main": "index.js",
+    "files": [
+        "index.js"
+    ],
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org",
+        "access": "public"
+    },
+    "engines": {
+        "node": ">=22"
+    },
+    "peerDependencies": {
+        "@eslint-community/eslint-plugin-eslint-comments": "^4.7.1",
+        "@wordpress/eslint-plugin": "^25.1.0",
+        "eslint": "^10.0.0",
+        "eslint-plugin-jest": "^29.15.2"
+    },
+    "keywords": [
+        "rtcamp",
+        "eslint",
+        "eslint-config",
+        "wordpress"
+    ]
+}

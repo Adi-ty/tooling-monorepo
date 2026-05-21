@@ -1,0 +1,8 @@
+# Keep test and dev artefacts out of installed Composer tarballs on the mirror.
+# splitsh-lite carries this file to the mirror as-is.
+/tests              export-ignore
+/Tests              export-ignore
+/.github            export-ignore
+phpunit.xml.dist    export-ignore
+phpstan.neon.dist   export-ignore
+.gitattributes      export-ignore

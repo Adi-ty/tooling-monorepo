@@ -1,0 +1,12 @@
+{
+    "name": "adi-ty/first-package",
+    "require": {
+        "php": "^8.3",
+        "symfony/http-kernel": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AdiTy\\FirstPackage\\": "src"
+        }
+    }
+}

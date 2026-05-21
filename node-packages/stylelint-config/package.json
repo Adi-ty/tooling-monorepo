@@ -1,0 +1,29 @@
+{
+    "name": "@adi.lib/stylelint-config",
+    "version": "0.1.0",
+    "description": "Shareable Stylelint config for rtCamp WordPress projects.",
+    "license": "GPL-2.0-or-later",
+    "author": "rtCamp",
+    "main": "index.js",
+    "files": [
+        "index.js"
+    ],
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org",
+        "access": "public"
+    },
+    "engines": {
+        "node": ">=22"
+    },
+    "peerDependencies": {
+        "@wordpress/stylelint-config": "^23.37.0",
+        "stylelint": "^16.8.2",
+        "stylelint-scss": "^6.4.0"
+    },
+    "keywords": [
+        "rtcamp",
+        "stylelint",
+        "stylelint-config",
+        "wordpress"
+    ]
+}

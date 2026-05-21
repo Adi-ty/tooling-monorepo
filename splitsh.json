@@ -1,0 +1,14 @@
+{
+    "$comment": "Source of truth for Composer subtree splits. Mirrors Symfony's splitsh.json schema.",
+    "$comment_subtrees": "Key = mirror repo name under 'organization'. Value = path inside the monorepo (or an object with 'prefixes' for advanced layouts).",
+    "organization": "adi-ty",
+    "subtrees": {
+        "first-package": "composer-packages/first-package",
+        "second-package": "composer-packages/second-package"
+    },
+    "defaults": {
+        "branch": "main",
+        "user_name": "github-actions[bot]",
+        "user_email": "github-actions[bot]@users.noreply.github.com"
+    }
+}
