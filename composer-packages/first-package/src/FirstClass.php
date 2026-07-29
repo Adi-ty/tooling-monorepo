@@ -6,4 +6,8 @@ namespace YourMonorepo\FirstPackage;
 
 final class FirstClass
 {
+    public function greet(): string
+    {
+        return 'Hello from first-package.';
+    }
 }
