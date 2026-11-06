@@ -11,3 +11,5 @@ final class FirstClass
         return 'Hello from first-package.';
     }
 }
+
+// release-please smoke test 2026-11-06T14:58:11Z
