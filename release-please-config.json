@@ -1,0 +1,102 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "e981b06a0d5543d9239a16e72c446c4e6d283057",
+  "separate-pull-requests": true,
+  "include-component-in-tag": true,
+  "include-v-in-tag": false,
+  "tag-separator": "@",
+  "changelog-sections": [
+    {
+      "type": "feat",
+      "section": "Added"
+    },
+    {
+      "type": "fix",
+      "section": "Fixed"
+    },
+    {
+      "type": "perf",
+      "section": "Changed"
+    },
+    {
+      "type": "revert",
+      "section": "Changed"
+    },
+    {
+      "type": "build",
+      "section": "Changed"
+    },
+    {
+      "type": "docs",
+      "section": "Documentation",
+      "hidden": true
+    },
+    {
+      "type": "style",
+      "section": "Styles",
+      "hidden": true
+    },
+    {
+      "type": "chore",
+      "section": "Miscellaneous",
+      "hidden": true
+    },
+    {
+      "type": "refactor",
+      "section": "Code Refactoring",
+      "hidden": true
+    },
+    {
+      "type": "test",
+      "section": "Tests",
+      "hidden": true
+    },
+    {
+      "type": "ci",
+      "section": "Continuous Integration",
+      "hidden": true
+    }
+  ],
+  "packages": {
+    "node-packages/eslint-config": {
+      "release-type": "node",
+      "component": "@adi.lib/eslint-config",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "/package-lock.json",
+          "jsonpath": "$.packages['node-packages/eslint-config'].version"
+        },
+        {
+          "type": "json",
+          "path": "/node-packages/stylelint-config/package.json",
+          "jsonpath": "$.devDependencies['@adi.lib/eslint-config']"
+        },
+        {
+          "type": "json",
+          "path": "/package-lock.json",
+          "jsonpath": "$.packages['node-packages/stylelint-config'].devDependencies['@adi.lib/eslint-config']"
+        }
+      ]
+    },
+    "node-packages/stylelint-config": {
+      "release-type": "node",
+      "component": "@adi.lib/stylelint-config",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "/package-lock.json",
+          "jsonpath": "$.packages['node-packages/stylelint-config'].version"
+        }
+      ]
+    },
+    "composer-packages/first-package": {
+      "release-type": "php",
+      "component": "adi-ty/first-package"
+    },
+    "composer-packages/second-package": {
+      "release-type": "php",
+      "component": "adi-ty/second-package"
+    }
+  }
+}

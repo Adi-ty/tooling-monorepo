@@ -25,5 +25,8 @@
         "stylelint",
         "stylelint-config",
         "wordpress"
-    ]
+    ],
+    "devDependencies": {
+        "@adi.lib/eslint-config": "^0.1.0"
+    }
 }
