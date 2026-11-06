@@ -1,5 +1,5 @@
 {
-  "node-packages/eslint-config": "0.1.0",
+  "node-packages/eslint-config": "1.0.0",
   "node-packages/stylelint-config": "0.1.0",
   "composer-packages/first-package": "0.1.0",
   "composer-packages/second-package": "0.0.2"
