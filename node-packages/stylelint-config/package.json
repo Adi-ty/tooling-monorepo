@@ -27,6 +27,6 @@
         "wordpress"
     ],
     "devDependencies": {
-        "@adi.lib/eslint-config": "^0.1.0"
+        "@adi.lib/eslint-config": "^1.0.0"
     }
 }
