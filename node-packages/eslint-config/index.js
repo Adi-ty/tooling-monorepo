@@ -17,3 +17,5 @@ module.exports = [
 		files: ['**/*.test.js'],
 	},
 ];
+
+// release-please smoke test: breaking change 2026-11-06T15:00:18Z
